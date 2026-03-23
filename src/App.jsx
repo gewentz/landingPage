@@ -29,19 +29,19 @@ function App() {
 
   return (
     <main className="flex flex-col min-h-screen">
-      <nav className="bg-persian-green-600 w-full h-16 shrink-0 z-50">
-        <div className="container px-20 mx-auto h-full flex items-center justify-between">
+      <nav className="bg-persian-green-600 w-full h-auto sm:h-16 shrink-0 z-50 py-4 sm:py-0">
+        <div className="container px-4 md:px-8 lg:px-20 mx-auto h-full flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
           <span id="inicio" className="flex justify-center items-center gap-2">
-            <h1 className="text-white text-xl font-bold">
+            <h1 className="text-white text-lg sm:text-xl font-bold text-center">
               4º Leilão em prol ao
             </h1>
             <img
-              className="h-16"
+              className="h-12 sm:h-16"
               src="/logo-hha-branca.png"
               alt="Logo Hospital Hélio Angotti"
             />
           </span>
-          <ul className="flex gap-4">
+          <ul className="flex flex-wrap justify-center gap-4">
             <li>
               <a
                 href="#inicio"
@@ -74,18 +74,18 @@ function App() {
         style={{ backgroundImage: "url('/leilao-de-gado.jpg')" }}
       >
         <div className="absolute inset-0 bg-black/60"></div>
-        <div className="relative z-10 max-w-4xl text-center px-2">
-          <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight drop-shadow-md">
+        <div className="relative z-10 max-w-4xl text-center px-4 md:px-8">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight drop-shadow-md">
             Venha participar desse momento de generosidade em prol ao Hospital
             Hélio Angotti!
           </h2>
         </div>
       </section>
-      <section id="sobre" className="w-full p-4">
+      <section id="sobre" className="w-full p-4 md:p-8">
         <div className="container mx-auto">
-          <div className="bg-white py-6 rounded-lg shadow-md flex flex-col justify-around items-center border gap-10 border-gray-200 px-10">
-            <div className="mb-6 md:mb-0 flex justify-between items-center w-full">
-              <div className="text-center mb-6 md:mb-0">
+          <div className="bg-white py-6 rounded-lg shadow-md flex flex-col justify-around items-center border gap-8 md:gap-10 border-gray-200 px-4 sm:px-10">
+            <div className="mb-6 md:mb-0 flex flex-col md:flex-row justify-between items-center md:items-start w-full gap-8 md:gap-4">
+              <div className="text-center mb-6 md:mb-0 md:w-1/2 flex flex-col items-center">
                 <h3 className="text-xl font-semibold text-persian-green-600 mb-2 flex items-center justify-center gap-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -109,7 +109,7 @@ function App() {
                 </p>
               </div>
 
-              <div className="text-center mb-6 md:mb-0">
+              <div className="text-center mb-6 md:mb-0 md:w-1/2 flex flex-col items-center">
                 <h3 className="text-xl font-semibold text-persian-green-600 mb-2 flex items-center justify-center gap-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -154,33 +154,47 @@ function App() {
                 O leilão começa em:
               </h3>
               {timeLeft.dias !== undefined ? (
-                <div className="flex gap-4 justify-center text-gray-700">
+                <div className="flex gap-2 sm:gap-4 justify-center text-gray-700">
                   <div className="flex flex-col items-center">
-                    <span className="text-3xl font-bold">{timeLeft.dias}</span>
-                    <span className="text-sm uppercase tracking-wide">
+                    <span className="text-2xl sm:text-3xl font-bold">
+                      {timeLeft.dias}
+                    </span>
+                    <span className="text-xs sm:text-sm uppercase tracking-wide">
                       Dias
                     </span>
                   </div>
-                  <span className="text-3xl flex flex-col items-center">:</span>
+                  <span className="text-2xl sm:text-3xl flex flex-col items-center">
+                    :
+                  </span>
                   <div className="flex flex-col items-center">
-                    <span className="text-3xl font-bold">{timeLeft.horas}</span>
-                    <span className="text-sm uppercase tracking-wide">
+                    <span className="text-2xl sm:text-3xl font-bold">
+                      {timeLeft.horas}
+                    </span>
+                    <span className="text-xs sm:text-sm uppercase tracking-wide">
                       Horas
                     </span>
                   </div>
-                  <span className="text-3xl flex flex-col items-center">:</span>
+                  <span className="text-2xl sm:text-3xl flex flex-col items-center">
+                    :
+                  </span>
                   <div className="flex flex-col items-center">
-                    <span className="text-3xl font-bold">
+                    <span className="text-2xl sm:text-3xl font-bold">
                       {timeLeft.minutos}
                     </span>
-                    <span className="text-sm uppercase tracking-wide">Min</span>
+                    <span className="text-xs sm:text-sm uppercase tracking-wide">
+                      Min
+                    </span>
                   </div>
-                  <span className="text-3xl flex flex-col items-center">:</span>
+                  <span className="text-2xl sm:text-3xl flex flex-col items-center">
+                    :
+                  </span>
                   <div className="flex flex-col items-center">
-                    <span className="text-3xl font-bold">
+                    <span className="text-2xl sm:text-3xl font-bold">
                       {timeLeft.segundos}
                     </span>
-                    <span className="text-sm uppercase tracking-wide">Seg</span>
+                    <span className="text-xs sm:text-sm uppercase tracking-wide">
+                      Seg
+                    </span>
                   </div>
                 </div>
               ) : (
@@ -192,9 +206,11 @@ function App() {
           </div>
         </div>
       </section>
-      <section id="contato" className="w-full p-8">
+      <section id="contato" className="w-full p-4 md:p-8">
         <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">Contato</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
+            Contato
+          </h2>
           <p className="text-gray-600 mb-4">
             Para mais informações sobre o leilão, e doações, entre em contato
             com os coordenadores
@@ -205,7 +221,7 @@ function App() {
             <h3 className="text-xl font-semibold text-persian-green-600">
               Coordenadores
             </h3>
-            <div className="flex justify-between items-center w-3/4 gap-2">
+            <div className="flex flex-col md:flex-row justify-start md:justify-between items-start md:items-center w-full md:w-3/4 lg:w-2/3 gap-6 md:gap-2 mt-2">
               <p className="text-gray-700">
                 Junior Vasconcelos (Chupeta)
                 <br />
