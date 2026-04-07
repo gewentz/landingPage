@@ -19,6 +19,7 @@ function App() {
   };
 
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+  const [selectedMedia, setSelectedMedia] = useState(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -60,6 +61,14 @@ function App() {
             </li>
             <li>
               <a
+                href="#galeria"
+                className="text-white hover:text-persian-green-200"
+              >
+                Fotos e Vídeos 
+              </a>
+            </li>
+            <li>
+              <a
                 href="#contato"
                 className="text-white hover:text-persian-green-200"
               >
@@ -70,8 +79,8 @@ function App() {
         </div>
       </nav>
       <section
-        className="relative w-full min-h-96 grow flex items-center justify-center bg-cover bg-center"
-        style={{ backgroundImage: "url('/leilao-de-gado.jpg')" }}
+        className="relative w-full min-h-96 grow flex items-center justify-center bg-cover"
+        style={{ backgroundImage: "url('/leilao-de-gado.jpeg')" }}
       >
         <div className="absolute inset-0 bg-black/60"></div>
         <div className="relative z-10 max-w-4xl text-center px-4 md:px-8">
@@ -206,6 +215,60 @@ function App() {
           </div>
         </div>
       </section>
+      <section id="galeria" className="w-full p-4 md:p-8 bg-gray-50">
+        <div className="container mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-8">
+            Galeria de Fotos dos Leilões Anteriores
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {[1, 2, 4, 5, 6, 7, 8].map((num) => (
+              <div
+                key={num}
+                className="overflow-hidden rounded-lg shadow-md aspect-square cursor-pointer group"
+                onClick={() =>
+                  setSelectedMedia({
+                    type: "image",
+                    src: `/img1 (${num}).jpeg`,
+                  })
+                }
+              >
+                <img
+                  src={`/img1 (${num}).jpeg`}
+                  alt={`Momento do Leilão ${num}`}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+              </div>
+            ))}
+            <div
+              className="overflow-hidden rounded-lg shadow-md aspect-square bg-black relative cursor-pointer group flex items-center justify-center"
+              onClick={() =>
+                setSelectedMedia({ type: "video", src: "/video.mp4" })
+              }
+            >
+              <video className="w-full h-full object-cover pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity">
+                <source src="/video.mp4" type="video/mp4" />
+                Seu navegador não suporta a tag de vídeo.
+              </video>
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="bg-black/50 rounded-full p-4 group-hover:bg-persian-green-600/80 transition-colors">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="w-10 h-10 text-white"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       <section id="contato" className="w-full p-4 md:p-8">
         <div className="container mx-auto">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
@@ -282,6 +345,55 @@ function App() {
         </div>
         <div></div>
       </footer>
+
+      {selectedMedia && (
+        <div
+          className="fixed inset-0 z-100 flex items-center justify-center bg-black/80 p-4 sm:p-8 backdrop-blur-sm transition-opacity"
+          onClick={() => setSelectedMedia(null)}
+        >
+          <button
+            className="absolute top-4 right-4 sm:top-8 sm:right-8 text-white hover:text-gray-300 z-101"
+            onClick={() => setSelectedMedia(null)}
+            aria-label="Fechar galeria"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="w-8 h-8 sm:w-10 sm:h-10"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+          <div
+            className="relative max-w-full max-h-full flex items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {selectedMedia.type === "image" ? (
+              <img
+                src={selectedMedia.src}
+                alt="Mídia ampliada"
+                className="max-w-full max-h-[90vh] object-contain rounded shadow-2xl"
+              />
+            ) : (
+              <video
+                controls
+                autoPlay
+                className="max-w-full max-h-[90vh] rounded shadow-2xl outline-none bg-black"
+              >
+                <source src={selectedMedia.src} type="video/mp4" />
+                Seu navegador não suporta a tag de vídeo.
+              </video>
+            )}
+          </div>
+        </div>
+      )}
     </main>
   );
 }
