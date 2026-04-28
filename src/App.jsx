@@ -1,4 +1,46 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+
+const FadeInSection = ({ children, delay = 0, className = "" }) => {
+  const [isVisible, setVisible] = useState(false);
+  const domRef = useRef();
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisible(true);
+          } else {
+            setVisible(false);
+          }
+        });
+      },
+      {
+        rootMargin: "0px 0px -50px 0px",
+        threshold: 0,
+      },
+    );
+
+    const currentRef = domRef.current;
+    if (currentRef) observer.observe(currentRef);
+
+    return () => {
+      if (currentRef) observer.unobserve(currentRef);
+    };
+  }, []);
+
+  return (
+    <div
+      className={`transform transition-all duration-1000 ease-out ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+      } ${className}`}
+      style={{ transitionDelay: `${delay}ms` }}
+      ref={domRef}
+    >
+      {children}
+    </div>
+  );
+};
 
 function App() {
   const targetDate = new Date("2026-06-06T10:30:00");
@@ -26,6 +68,21 @@ function App() {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const hasSeenPopup = sessionStorage.getItem("hasSeenWelcomePopup");
+
+    if (!hasSeenPopup) {
+      const popupVideos = [
+        "/eu_rhobragapamplonaferreira_1776975044_3881870010063020054_3114910534.mp4",
+        "/amigosdohelio.itapagipe_1776864418_3880940168216168873_36115832205.mp4",
+      ];
+      const randomVideo =
+        popupVideos[Math.floor(Math.random() * popupVideos.length)];
+      setSelectedMedia({ type: "video", src: randomVideo });
+      sessionStorage.setItem("hasSeenWelcomePopup", "true");
+    }
   }, []);
 
   return (
@@ -64,7 +121,7 @@ function App() {
                 href="#galeria"
                 className="text-white hover:text-persian-green-200"
               >
-                Fotos e Vídeos 
+                Fotos e Vídeos
               </a>
             </li>
             <li>
@@ -84,14 +141,16 @@ function App() {
       >
         <div className="absolute inset-0 bg-black/60"></div>
         <div className="relative z-10 max-w-4xl text-center px-4 md:px-8">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight drop-shadow-md">
-            Venha participar desse momento de generosidade em prol ao Hospital
-            Hélio Angotti!
-          </h2>
+          <FadeInSection>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight drop-shadow-md">
+              Venha participar desse momento de generosidade em prol ao Hospital
+              Hélio Angotti!
+            </h2>
+          </FadeInSection>
         </div>
       </section>
-      <section id="sobre" className="w-full p-4 md:p-8">
-        <div className="container mx-auto">
+      <section className="w-full p-4 md:p-8">
+        <FadeInSection className="container mx-auto">
           <div className="bg-white py-6 rounded-lg shadow-md flex flex-col justify-around items-center border gap-8 md:gap-10 border-gray-200 px-4 sm:px-10">
             <div className="mb-6 md:mb-0 flex flex-col md:flex-row justify-between items-center md:items-start w-full gap-8 md:gap-4">
               <div className="text-center mb-6 md:mb-0 md:w-1/2 flex flex-col items-center">
@@ -213,64 +272,159 @@ function App() {
               )}
             </div>
           </div>
-        </div>
+        </FadeInSection>
       </section>
-      <section id="galeria" className="w-full p-4 md:p-8 bg-gray-50">
+
+      <section id="sobre" className="w-full p-4 md:p-8 bg-persian-green-100">
         <div className="container mx-auto">
           <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-8">
-            Galeria de Fotos dos Leilões Anteriores
+            Hospital Hélio Angotti
           </h2>
+          <div className="text-gray-800 text-lg text-justify leading-relaxed max-w-3xl mx-auto space-y-4 [&>p]:indent-8">
+            <FadeInSection>
+              <p>
+                O Hospital Hélio Angotti, localizado na cidade de Uberaba – MG,
+                é muito mais do que um hospital, é um símbolo de luta, esperança
+                e compromisso com a vida. Sua história começou em 1951, com a
+                criação da Associação de Combate ao Câncer do Brasil Central,
+                idealizada por profissionais que acreditavam que era possível
+                enfrentar o câncer com informação, prevenção e cuidado. Em 1961,
+                esse sonho se tornou realidade com a inauguração do hospital,
+                que desde então se tornou referência no tratamento oncológico.
+              </p>
+            </FadeInSection>
+
+            <FadeInSection>
+              <p>
+                Ao longo das décadas, o hospital cresceu, evoluiu e se
+                modernizou, mas nunca perdeu sua essência: cuidar das pessoas
+                com dignidade, acolhimento e respeito. Hoje, atende pacientes de
+                cerca de 26 municípios da macrorregião Triângulo Sul, sendo uma
+                referência regional no tratamento do câncer, especialmente pelo
+                Sistema Único de Saúde (SUS).
+              </p>
+            </FadeInSection>
+            <FadeInSection>
+              <p>
+                E é importante que a população entenda como esse trabalho
+                acontece. Diferente do que muitos imaginam, o SUS não repassa um
+                valor fixo por paciente. O pagamento é feito por procedimentos
+                realizados, como quimioterapia, radioterapia, cirurgias e
+                exames, todos com valores previamente definidos em uma tabela
+                nacional.
+              </p>
+            </FadeInSection>
+            <FadeInSection>
+              <p>
+                Esses valores já incluem medicamentos, equipe médica, estrutura
+                e todos os custos do tratamento. Ou seja, o hospital precisa
+                arcar com despesas muitas vezes altas, especialmente com
+                medicamentos modernos, recebendo, em contrapartida, valores que
+                nem sempre cobrem o custo real.
+              </p>
+            </FadeInSection>
+            <FadeInSection>
+              <p>
+                Mesmo diante desses desafios, o Hospital Hélio Angotti segue
+                firme em sua missão. E os números comprovam a grandiosidade
+                desse trabalho. Em 2024, foram realizados quase 56 mil
+                atendimentos ambulatoriais. Já em 2025, esse número ultrapassou
+                84 mil atendimentos, além de mais de 3.300 internações. São
+                milhares de vidas acolhidas, tratadas e acompanhadas com
+                dedicação diária.
+              </p>
+            </FadeInSection>
+            <FadeInSection>
+              <p>
+                Por trás de cada atendimento, existe uma história. Existe alguém
+                lutando, uma família esperando, uma esperança sendo renovada.
+              </p>
+            </FadeInSection>
+            <FadeInSection>
+              <p>
+                Por isso, a participação da comunidade é fundamental. Sendo uma
+                instituição filantrópica, o hospital depende também do apoio da
+                população para continuar oferecendo um atendimento de qualidade,
+                humano e acessível a todos.
+              </p>
+            </FadeInSection>
+            <FadeInSection>
+              <p>
+                É nesse espírito de solidariedade que nasce o 4º Leilão
+                Beneficente em prol ao Hospital Hélio Angotti. Mais do que um
+                evento, é um ato de amor ao próximo. Uma oportunidade de unir
+                forças, contribuir e fazer parte de uma corrente do bem que
+                salva vidas todos os dias.{" "}
+                <strong>
+                  Participar é mais do que ajudar, é fazer a diferença.
+                </strong>
+              </p>
+            </FadeInSection>
+          </div>
+        </div>
+      </section>
+
+      <section id="galeria" className="w-full p-4 md:p-8 bg-gray-50">
+        <div className="container mx-auto">
+          <FadeInSection>
+            <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-8">
+              Galeria de Fotos dos Leilões Anteriores
+            </h2>
+          </FadeInSection>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {[1, 2, 4, 5, 6, 7, 8].map((num) => (
+            {[1, 2, 4, 5, 6, 7, 8].map((num, index) => (
+              <FadeInSection key={num} delay={index * 100}>
+                <div
+                  className="overflow-hidden rounded-lg shadow-md aspect-square cursor-pointer group h-full"
+                  onClick={() =>
+                    setSelectedMedia({
+                      type: "image",
+                      src: `/img1 (${num}).jpeg`,
+                    })
+                  }
+                >
+                  <img
+                    src={`/img1 (${num}).jpeg`}
+                    alt={`Momento do Leilão ${num}`}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
+              </FadeInSection>
+            ))}
+            <FadeInSection delay={700}>
               <div
-                key={num}
-                className="overflow-hidden rounded-lg shadow-md aspect-square cursor-pointer group"
+                className="overflow-hidden rounded-lg shadow-md aspect-square bg-black relative cursor-pointer group flex items-center justify-center h-full"
                 onClick={() =>
-                  setSelectedMedia({
-                    type: "image",
-                    src: `/img1 (${num}).jpeg`,
-                  })
+                  setSelectedMedia({ type: "video", src: "/video.mp4" })
                 }
               >
-                <img
-                  src={`/img1 (${num}).jpeg`}
-                  alt={`Momento do Leilão ${num}`}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-              </div>
-            ))}
-            <div
-              className="overflow-hidden rounded-lg shadow-md aspect-square bg-black relative cursor-pointer group flex items-center justify-center"
-              onClick={() =>
-                setSelectedMedia({ type: "video", src: "/video.mp4" })
-              }
-            >
-              <video className="w-full h-full object-cover pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity">
-                <source src="/video.mp4" type="video/mp4" />
-                Seu navegador não suporta a tag de vídeo.
-              </video>
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="bg-black/50 rounded-full p-4 group-hover:bg-persian-green-600/80 transition-colors">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="w-10 h-10 text-white"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                <video className="w-full h-full object-cover pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity">
+                  <source src="/video.mp4" type="video/mp4" />
+                  Seu navegador não suporta a tag de vídeo.
+                </video>
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="bg-black/50 rounded-full p-4 group-hover:bg-persian-green-600/80 transition-colors">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-10 h-10 text-white"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
                 </div>
               </div>
-            </div>
+            </FadeInSection>
           </div>
         </div>
       </section>
       <section id="contato" className="w-full p-4 md:p-8">
-        <div className="container mx-auto">
+        <FadeInSection className="container mx-auto mb-8">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
             Contato
           </h2>
@@ -278,8 +432,8 @@ function App() {
             Para mais informações sobre o leilão, e doações, entre em contato
             com os coordenadores
           </p>
-        </div>
-        <div className="container mx-auto">
+        </FadeInSection>
+        <FadeInSection className="container mx-auto">
           <div className="flex flex-col gap-2">
             <h3 className="text-xl font-semibold text-persian-green-600">
               Coordenadores
@@ -325,7 +479,7 @@ function App() {
               </p>
             </div>
           </div>
-        </div>
+        </FadeInSection>
       </section>
       <footer>
         <div className=" bg-persian-green-500 w-full text-center py-4 text-gray-200 text-sm">
@@ -385,6 +539,7 @@ function App() {
               <video
                 controls
                 autoPlay
+                playsInline
                 className="max-w-full max-h-[90vh] rounded shadow-2xl outline-none bg-black"
               >
                 <source src={selectedMedia.src} type="video/mp4" />
