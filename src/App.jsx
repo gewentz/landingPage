@@ -42,6 +42,35 @@ const FadeInSection = ({ children, delay = 0, className = "" }) => {
   );
 };
 
+const YouTubeLive = () => {
+  return (
+    <div
+      className="video-responsive"
+      style={{
+        overflow: "hidden",
+        paddingBottom: "56.25%",
+        position: "relative",
+        height: 0,
+      }}
+    >
+      <iframe
+        style={{
+          left: 0,
+          top: 0,
+          height: "100%",
+          width: "100%",
+          position: "absolute",
+        }}
+        src={`https://www.youtube-nocookie.com/embed/-rUPZErXlfU?autoplay=1&mute=1`}
+        title="YouTube Live Stream"
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowFullScreen
+      ></iframe>
+    </div>
+  );
+};
+
 function App() {
   const targetDate = new Date("2026-06-06T10:30:00");
 
@@ -217,58 +246,65 @@ function App() {
               </div>
             </div>
 
-            <div className="text-center">
-              <h3 className="text-xl font-semibold text-persian-green-600 mb-4">
-                O leilão começa em:
-              </h3>
+            <div className="text-center w-full">
               {timeLeft.dias !== undefined ? (
-                <div className="flex gap-2 sm:gap-4 justify-center text-gray-700">
-                  <div className="flex flex-col items-center">
-                    <span className="text-2xl sm:text-3xl font-bold">
-                      {timeLeft.dias}
+                <>
+                  <h3 className="text-xl font-semibold text-persian-green-600 mb-4">
+                    O leilão começa em:
+                  </h3>
+                  <div className="flex gap-2 sm:gap-4 justify-center text-gray-700">
+                    <div className="flex flex-col items-center">
+                      <span className="text-2xl sm:text-3xl font-bold">
+                        {timeLeft.dias}
+                      </span>
+                      <span className="text-xs sm:text-sm uppercase tracking-wide">
+                        Dias
+                      </span>
+                    </div>
+                    <span className="text-2xl sm:text-3xl flex flex-col items-center">
+                      :
                     </span>
-                    <span className="text-xs sm:text-sm uppercase tracking-wide">
-                      Dias
+                    <div className="flex flex-col items-center">
+                      <span className="text-2xl sm:text-3xl font-bold">
+                        {timeLeft.horas}
+                      </span>
+                      <span className="text-xs sm:text-sm uppercase tracking-wide">
+                        Horas
+                      </span>
+                    </div>
+                    <span className="text-2xl sm:text-3xl flex flex-col items-center">
+                      :
                     </span>
+                    <div className="flex flex-col items-center">
+                      <span className="text-2xl sm:text-3xl font-bold">
+                        {timeLeft.minutos}
+                      </span>
+                      <span className="text-xs sm:text-sm uppercase tracking-wide">
+                        Min
+                      </span>
+                    </div>
+                    <span className="text-2xl sm:text-3xl flex flex-col items-center">
+                      :
+                    </span>
+                    <div className="flex flex-col items-center">
+                      <span className="text-2xl sm:text-3xl font-bold">
+                        {timeLeft.segundos}
+                      </span>
+                      <span className="text-xs sm:text-sm uppercase tracking-wide">
+                        Seg
+                      </span>
+                    </div>
                   </div>
-                  <span className="text-2xl sm:text-3xl flex flex-col items-center">
-                    :
-                  </span>
-                  <div className="flex flex-col items-center">
-                    <span className="text-2xl sm:text-3xl font-bold">
-                      {timeLeft.horas}
-                    </span>
-                    <span className="text-xs sm:text-sm uppercase tracking-wide">
-                      Horas
-                    </span>
-                  </div>
-                  <span className="text-2xl sm:text-3xl flex flex-col items-center">
-                    :
-                  </span>
-                  <div className="flex flex-col items-center">
-                    <span className="text-2xl sm:text-3xl font-bold">
-                      {timeLeft.minutos}
-                    </span>
-                    <span className="text-xs sm:text-sm uppercase tracking-wide">
-                      Min
-                    </span>
-                  </div>
-                  <span className="text-2xl sm:text-3xl flex flex-col items-center">
-                    :
-                  </span>
-                  <div className="flex flex-col items-center">
-                    <span className="text-2xl sm:text-3xl font-bold">
-                      {timeLeft.segundos}
-                    </span>
-                    <span className="text-xs sm:text-sm uppercase tracking-wide">
-                      Seg
-                    </span>
+                </>
+              ) : (
+                <div className="w-full">
+                  <p className="text-lg font-bold text-persian-green-600 mb-4">
+                    O leilão já começou!
+                  </p>
+                  <div className="text-gray-700 text-lg font-medium w-full max-w-3xl mx-auto">
+                    <YouTubeLive />
                   </div>
                 </div>
-              ) : (
-                <p className="text-lg font-bold text-persian-green-600">
-                  O leilão já começou!
-                </p>
               )}
             </div>
           </div>
