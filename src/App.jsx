@@ -526,7 +526,7 @@ function App() {
           <p className="text-center text-gray-300 text-xs mt-2">
             Desenvolvido por{" "}
             <a
-              href="https://gabriel-wentz.vercel.app/"
+              href="https://wentz.vercel.app/"
               className="text-persian-green-100 hover:text-persian-green-900 hover:underline"
             >
               Gabriel Wentz
