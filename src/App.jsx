@@ -43,6 +43,7 @@ const FadeInSection = ({ children, delay = 0, className = "" }) => {
 };
 
 const YouTubeLive = () => {
+  retuconst YouTubeLive = () => {
   return (
     <div
       className="video-responsive"
@@ -61,13 +62,17 @@ const YouTubeLive = () => {
           width: "100%",
           position: "absolute",
         }}
-        src={`https://www.youtube-nocookie.com/embed/-rUPZErXlfU?autoplay=1&mute=1`}
+        /* Atualizado com o ID da nova live e mantendo o autoplay/mute */
+        src="https://www.youtube-nocookie.com/embed/moL5MROPe4M?autoplay=1&mute=1"
         title="YouTube Live Stream"
         frameBorder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowFullScreen
       ></iframe>
     </div>
+  );
+};
+
   );
 };
 
