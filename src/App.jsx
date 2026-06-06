@@ -43,7 +43,6 @@ const FadeInSection = ({ children, delay = 0, className = "" }) => {
 };
 
 const YouTubeLive = () => {
-  retuconst YouTubeLive = () => {
   return (
     <div
       className="video-responsive"
@@ -73,8 +72,6 @@ const YouTubeLive = () => {
   );
 };
 
-  );
-};
 
 function App() {
   const targetDate = new Date("2026-06-06T10:30:00");
