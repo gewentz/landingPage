@@ -71,6 +71,14 @@ const YouTubeLive = () => {
   );
 };
 
+const galleryMedia = Object.keys(
+  import.meta.glob("/public/galeria/*.{jpg,jpeg,png,mp4}", { eager: true }),
+).map((path) => path.replace("/public", ""));
+
+const popupMedia = Object.keys(
+  import.meta.glob("/public/pop-up/*.{jpg,jpeg,png,mp4}", { eager: true }),
+).map((path) => path.replace("/public", ""));
+
 function App() {
   const targetDate = new Date("2026-06-06T10:30:00");
 
@@ -102,14 +110,13 @@ function App() {
   useEffect(() => {
     const hasSeenPopup = sessionStorage.getItem("hasSeenWelcomePopup");
 
-    if (!hasSeenPopup) {
-      const popupVideos = [
-        "/eu_rhobragapamplonaferreira_1776975044_3881870010063020054_3114910534.mp4",
-        "/amigosdohelio.itapagipe_1776864418_3880940168216168873_36115832205.mp4",
-      ];
-      const randomVideo =
-        popupVideos[Math.floor(Math.random() * popupVideos.length)];
-      setSelectedMedia({ type: "video", src: randomVideo });
+    if (!hasSeenPopup && popupMedia.length > 0) {
+      const randomMedia =
+        popupMedia[Math.floor(Math.random() * popupMedia.length)];
+      const type = randomMedia.toLowerCase().endsWith(".mp4")
+        ? "video"
+        : "image";
+      setSelectedMedia({ type, src: randomMedia });
       sessionStorage.setItem("hasSeenWelcomePopup", "true");
     }
   }, []);
@@ -120,7 +127,7 @@ function App() {
         <div className="container px-4 md:px-8 lg:px-20 mx-auto h-full flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
           <span id="inicio" className="flex justify-center items-center gap-2">
             <h1 className="text-white text-lg sm:text-xl font-bold text-center">
-              4º Leilão em prol ao
+              Leilão em prol ao
             </h1>
             <img
               className="h-12 sm:h-16"
@@ -166,7 +173,10 @@ function App() {
       </nav>
       <section
         className="relative w-full min-h-96 grow flex items-center justify-center bg-cover"
-        style={{ backgroundImage: "url('/leilao-de-gado.jpeg')" }}
+        style={{
+          backgroundImage:
+            "url('/galeria/718597568_18089067671200206_2391398316791558586_n.jpg')",
+        }}
       >
         <div className="absolute inset-0 bg-black/60"></div>
         <div className="relative z-10 max-w-4xl text-center px-4 md:px-8">
@@ -182,7 +192,7 @@ function App() {
         <FadeInSection className="container mx-auto">
           <div className="bg-white py-6 rounded-lg shadow-md flex flex-col justify-around items-center border gap-8 md:gap-10 border-gray-200 px-4 sm:px-10">
             <div className="mb-6 md:mb-0 flex flex-col md:flex-row justify-between items-center md:items-start w-full gap-8 md:gap-4">
-              <div className="text-center mb-6 md:mb-0 md:w-1/2 flex flex-col items-center">
+              {/*<div className="text-center mb-6 md:mb-0 md:w-1/2 flex flex-col items-center">
                 <h3 className="text-xl font-semibold text-persian-green-600 mb-2 flex items-center justify-center gap-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -204,7 +214,7 @@ function App() {
                   Sábado, 6 de Junho de 2026 a partir das 10h30 (Horário de
                   Brasília)
                 </p>
-              </div>
+              </div> 
 
               <div className="text-center mb-6 md:mb-0 md:w-1/2 flex flex-col items-center">
                 <h3 className="text-xl font-semibold text-persian-green-600 mb-2 flex items-center justify-center gap-2">
@@ -243,7 +253,7 @@ function App() {
                 >
                   Ver no Google Maps
                 </a>
-              </div>
+              </div>*/}
             </div>
 
             <div className="text-center w-full">
@@ -299,10 +309,24 @@ function App() {
               ) : (
                 <div className="w-full">
                   <p className="text-lg font-bold text-persian-green-600 mb-4">
-                    O leilão já começou!
+                    O leilão foi um sucesso! Todo o trabalho dos voluntários e
+                    dos organizadores merece ser celebrado. Agradecemos a todos
+                    que participaram, contribuíram e fizeram parte desse momento
+                    tão especial. Continuamos juntos na missão de apoiar o
+                    Hospital Hélio Angotti e transformar vidas.
                   </p>
                   <div className="text-gray-700 text-lg font-medium w-full max-w-3xl mx-auto">
-                    <YouTubeLive />
+                    <video
+                      controls
+                      className="w-full h-auto rounded-lg shadow-lg"
+                      preload="metadata"
+                    >
+                      <source
+                        src="/pop-up/StorySaver.net-amigosdohelio.itapagipe-Video-1780836296568.mp4"
+                        type="video/mp4"
+                      />
+                      Seu navegador não suporta a tag de vídeo.
+                    </video>
                   </div>
                 </div>
               )}
@@ -408,54 +432,51 @@ function App() {
             </h2>
           </FadeInSection>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {[1, 2, 4, 5, 6, 7, 8].map((num, index) => (
-              <FadeInSection key={num} delay={index * 100}>
-                <div
-                  className="overflow-hidden rounded-lg shadow-md aspect-square cursor-pointer group h-full"
-                  onClick={() =>
-                    setSelectedMedia({
-                      type: "image",
-                      src: `/img1 (${num}).jpeg`,
-                    })
-                  }
-                >
-                  <img
-                    src={`/img1 (${num}).jpeg`}
-                    alt={`Momento do Leilão ${num}`}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                </div>
-              </FadeInSection>
-            ))}
-            <FadeInSection delay={700}>
-              <div
-                className="overflow-hidden rounded-lg shadow-md aspect-square bg-black relative cursor-pointer group flex items-center justify-center h-full"
-                onClick={() =>
-                  setSelectedMedia({ type: "video", src: "/video.mp4" })
-                }
-              >
-                <video className="w-full h-full object-cover pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity">
-                  <source src="/video.mp4" type="video/mp4" />
-                  Seu navegador não suporta a tag de vídeo.
-                </video>
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="bg-black/50 rounded-full p-4 group-hover:bg-persian-green-600/80 transition-colors">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      className="w-10 h-10 text-white"
+            {galleryMedia.map((src, index) => {
+              const isVideo = src.toLowerCase().endsWith(".mp4");
+              return (
+                <FadeInSection key={src} delay={(index % 4) * 100}>
+                  {isVideo ? (
+                    <div
+                      className="overflow-hidden rounded-lg shadow-md aspect-square bg-black relative cursor-pointer group flex items-center justify-center h-full"
+                      onClick={() => setSelectedMedia({ type: "video", src })}
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z"
-                        clipRule="evenodd"
+                      <video className="w-full h-full object-cover pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity">
+                        <source src={src} type="video/mp4" />
+                        Seu navegador não suporta a tag de vídeo.
+                      </video>
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <div className="bg-black/50 rounded-full p-4 group-hover:bg-persian-green-600/80 transition-colors">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="w-10 h-10 text-white"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      className="overflow-hidden rounded-lg shadow-md aspect-square cursor-pointer group h-full"
+                      onClick={() => setSelectedMedia({ type: "image", src })}
+                    >
+                      <img
+                        src={src}
+                        alt={`Momento do Leilão ${index + 1}`}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            </FadeInSection>
+                    </div>
+                  )}
+                </FadeInSection>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -518,7 +539,108 @@ function App() {
         </FadeInSection>
       </section>
       <footer>
-        <div className=" bg-persian-green-500 w-full text-center py-4 text-gray-200 text-sm">
+        <div className=" bg-persian-green-500 w-full text-center py-8 text-gray-200 text-sm px-4">
+          <div className="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16 mb-8">
+            {/* Redes do Hospital */}
+            <div className="flex flex-col items-center gap-3">
+              <span className="text-xs uppercase tracking-widest font-bold opacity-80">
+                Hospital Hélio Angotti
+              </span>
+              <div className="flex gap-5">
+                <a
+                  href="https://helioangotti.com.br/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-200 hover:text-white transition-colors"
+                  title="Site Oficial Hospital Hélio Angotti"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m2.247 2.247A11.96 11.96 0 0 1 12 16.5c2.998 0 5.74 1.1 7.843 2.918m-15.686 0A8.959 8.959 0 0 1 3 12c0-.778.099-1.533.284-2.253"
+                    />
+                  </svg>
+                </a>
+                <a
+                  href="https://www.instagram.com/@hhelioangotti"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-200 hover:text-white transition-colors"
+                  title="Instagram Hospital Hélio Angotti"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512"
+                    className="w-6 h-6 fill-current"
+                  >
+                    <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" />
+                  </svg>
+                </a>
+                <a
+                  href="https://www.youtube.com/@hhelioangotti"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-200 hover:text-white transition-colors"
+                  title="YouTube Hospital Hélio Angotti"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 576 512"
+                    className="w-6 h-6 fill-current"
+                  >
+                    <path d="M549.7 124.1c-6.3-23.7-24.8-42.3-48.3-48.6C458.8 64 288 64 288 64S117.2 64 74.6 75.5c-23.5 6.3-42 24.9-48.3 48.6-11.4 42.9-11.4 131.9-11.4 131.9s0 89 11.4 131.9c6.3 23.7 24.8 41.5 48.3 47.8C117.2 448 288 448 288 448s170.8 0 213.4-12.5c23.5-6.3 42-24.1 48.3-47.8 11.4-42.9 11.4-131.9 11.4-131.9s0-89-11.4-131.9zM232 337.7V174.3l142 81.7-142 81.7z" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            {/* Redes Amigos do Hélio */}
+            <div className="flex flex-col items-center gap-3">
+              <span className="text-xs uppercase tracking-widest font-bold opacity-80">
+                Amigos do Hélio - Itapagipe
+              </span>
+              <div className="flex gap-5">
+                <a
+                  href="https://www.instagram.com/amigosdohelio.itapagipe/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-200 hover:text-white transition-colors"
+                  title="Instagram Amigos do Hélio Itapagipe"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512"
+                    className="w-6 h-6 fill-current"
+                  >
+                    <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" />
+                  </svg>
+                </a>
+                <a
+                  href="https://www.youtube.com/@amigosdohelio.itapagipe"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-200 hover:text-white transition-colors"
+                  title="YouTube Amigos do Hélio Itapagipe"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 576 512"
+                    className="w-6 h-6 fill-current"
+                  >
+                    <path d="M549.7 124.1c-6.3-23.7-24.8-42.3-48.3-48.6C458.8 64 288 64 288 64S117.2 64 74.6 75.5c-23.5 6.3-42 24.9-48.3 48.6-11.4 42.9-11.4 131.9-11.4 131.9s0 89 11.4 131.9c6.3 23.7 24.8 41.5 48.3 47.8C117.2 448 288 448 288 448s170.8 0 213.4-12.5c23.5-6.3 42-24.1 48.3-47.8 11.4-42.9 11.4-131.9 11.4-131.9s0-89-11.4-131.9zM232 337.7V174.3l142 81.7-142 81.7z" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
           <p>
             &copy; 2026 4º Leilão em prol ao Hospital Hélio Angotti. Todos os
             direitos reservados.
@@ -533,7 +655,6 @@ function App() {
             </a>
           </p>
         </div>
-        <div></div>
       </footer>
 
       {selectedMedia && (
